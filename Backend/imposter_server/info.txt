@@ -1,0 +1,2 @@
+npx localtunnel --port 8081 --subdomain impostergame
+npx localtunnel --port 3001 --subdomain impostergame-backend

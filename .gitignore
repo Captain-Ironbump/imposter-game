@@ -36,5 +36,5 @@
 ./Frontend/**/next-env.d.ts
 **/.vscode
 
-
+./Backend/**/node_modules
 
