@@ -1,14 +1,14 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
+#TODO: change to bun
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
-
 COPY . .
+
+RUN npm install
 
 RUN npm run build
 
-EXPOSE 3000
+FROM nginx:alpine
 
-CMD ["npm", "start"]
+COPY --from=builder /app/out /usr/share/nginx/html
