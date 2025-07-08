@@ -1,15 +1,17 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
+//require('dotenv').config();
 
 const app = express();
 app.set('trust proxy', true);
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:8081', 'https://impostergame.loca.lt'],
+    origin: "*",
     methods: ['GET', 'POST']
-  }
+  },
+  path: "/socket.io",
 });
 
 const rooms = {};

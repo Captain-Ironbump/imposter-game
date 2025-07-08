@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./Frontend/imposter-socket
+    restart: always
+    expose:
+      - 3000
+
+  backend:
+    build:
+      context: ./Backend/imposter_server
+    restart: always
+    expose:
+      - 4000
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
