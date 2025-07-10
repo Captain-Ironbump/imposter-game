@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es5", // Transpile to ES5
+    "module": "commonjs", // Use CommonJS modules
+    "outDir": "built", // Output directory for compiled files
+    "strict": true // Enable strict mode for TypeScript
+  },
+  "include": ["src"] // Include source files in src directory
+}
