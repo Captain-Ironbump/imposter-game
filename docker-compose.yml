@@ -6,6 +6,8 @@ services:
     # Produces a static build, not served directly
     networks:
       - app-network
+    env_file:
+      - ./Frontend/imposter-socket/.env.docker
 
   backend:
     build: ./Backend/imposter_server

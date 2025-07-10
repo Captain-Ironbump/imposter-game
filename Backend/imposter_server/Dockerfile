@@ -8,4 +8,4 @@ RUN bun install
 
 EXPOSE 4000
 
-CMD ["bun", "server.js"]
+CMD ["bun", "index.js"]
