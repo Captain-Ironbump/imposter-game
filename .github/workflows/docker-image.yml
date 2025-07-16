@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: docker-build
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
