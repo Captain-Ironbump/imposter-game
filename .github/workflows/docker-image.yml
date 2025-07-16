@@ -22,15 +22,15 @@ jobs:
 
       - name: Build and push frontend Image
         run: |
-          docker build ./Frontend/imposter-socket --tag ${{ secrets.DOCKER_USERNAME }}/imposter-frontend:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/imposter-socket:latest
+          docker build ./Frontend/imposter-socket --tag ${{ vars.DOCKER_USERNAME }}/imposter-frontend:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/imposter-socket:latest
 
       - name: Build and push backend Image
         run: |
-          docker build ./Backend/imposter_server --tag ${{ secrets.DOCKER_USERNAME }}/imposter-backend:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/imposter-backend:latest
+          docker build ./Backend/imposter_server --tag ${{ vars.DOCKER_USERNAME }}/imposter-backend:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/imposter-backend:latest
 
       - name: Build and push nginx reverse proxy Image
         run: |
-          docker build ./nginx --tag ${{ secrets.DOCKER_USERNAME }}/imposter-reverse-proxy:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/imposter-nginx:latest
+          docker build ./nginx --tag ${{ vars.DOCKER_USERNAME }}/imposter-reverse-proxy:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/imposter-nginx:latest
