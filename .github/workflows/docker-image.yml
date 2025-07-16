@@ -22,7 +22,7 @@ jobs:
 
       - name: Build and push frontend Image
         run: |
-          docker build ./Frontend/imposter-socket --tag ${{ vars.DOCKER_USERNAME }}/imposter-game/:frontend
+          docker build ./Frontend/imposter-socket --tag ${{ vars.DOCKER_USERNAME }}/imposter-game:frontend
           docker push ${{ vars.DOCKER_USERNAME }}/imposter-game:frontend
 
       - name: Build and push backend Image
