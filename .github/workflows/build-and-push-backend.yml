@@ -1,0 +1,26 @@
+name: Build and Push Docker Image - Backend
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: docker-build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Echo Docker Username
+        run: echo ${{ env.DOCKER_USERNAME }}
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push backend Image
+        run: |
+          docker build ./Backend/imposter_server --tag ${{ vars.DOCKER_USERNAME }}/imposter-game:backend
+          docker push ${{ vars.DOCKER_USERNAME }}/imposter-game:backend
