@@ -1,3 +1,4 @@
-import { startServer } from "./src/server";
+import { ImposterServer } from "./src/ImposterServer";
 
-startServer();
+const server = new ImposterServer();
+server.start();
