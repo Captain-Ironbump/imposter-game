@@ -13,7 +13,6 @@ import type {
 } from '../data/room/IRooms';
 import { IRoomObserver } from '../data/room/IRoomObserver.js';
 
-
 export class SocketController {
   private io: Server;
   private observer: IRoomObserver;

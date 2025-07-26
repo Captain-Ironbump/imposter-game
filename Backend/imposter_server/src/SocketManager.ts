@@ -21,7 +21,7 @@ export class SocketManager implements IRoomObserver {
             this.socketController.handleSocketCommands(socket, this.rooms);
         });
     }
-
+    
     onGameStarted(roomId: string): void {
         logger.info(`Game started in room ${roomId}`);
         this.io.to(roomId).emit('gameStarted');
