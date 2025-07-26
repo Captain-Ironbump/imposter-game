@@ -8,7 +8,10 @@ import type {
 } from '../IServer';
 import type {
   IRooms
-} from '../IRooms';
+} from '../data/room/IRooms.ts';
+import { IRoomData } from '../data/room/IRoomData.js';
+import { RoomData } from '../data/room/RoomData.js';
+import { IRoomObserver } from '../data/room/IRoomObserver.js';
 
 export function createRoom(
   io: Server<
@@ -18,11 +21,15 @@ export function createRoom(
     SocketData
   >, 
   socket: Socket, 
-  rooms: IRooms
+  rooms: IRooms,
+  observer: IRoomObserver
 ) {
   const roomId = `Room-${Math.floor(Math.random() * 1000)}`;
   if (!rooms[roomId]) {
-    rooms[roomId] = [socket.id];
+    let roomData: IRoomData = new RoomData(roomId);
+    roomData.addUser(socket.id); 
+    roomData.addObserver(observer);
+    rooms[roomId] = roomData;
     socket.join(roomId);
     socket.emit('roomCreated', roomId);
     io.emit('roomsList', Object.keys(rooms));
@@ -45,7 +52,7 @@ export function joinRoom(
   data: { roomId: string }
 ) {
   if (rooms[data.roomId] != null) {
-    rooms[data.roomId]?.push(socket.id);
+    rooms[data.roomId]?.addUser(socket.id);
     socket.join(data.roomId);
     logger.info(`User ${socket.id} joined room: ${data.roomId}`)
     socket.emit('userInRoom', data.roomId);
@@ -60,7 +67,7 @@ export function getRooms(socket: Socket, rooms: IRooms) {
 }
 
 export function getUserInRoom(socket: Socket, rooms: IRooms) {
-  const userRoom = Object.keys(rooms).find(room => rooms[room]?.includes(socket.id));
+  const userRoom = Object.keys(rooms).find(room => rooms[room]?.isUserInRoom(socket.id));
   socket.emit('userInRoom', userRoom);
 }
 
@@ -76,10 +83,10 @@ export function leaveRoom(
   data: { roomId: string }
 ) {
   if (rooms[data.roomId] != null) {
-    rooms[data.roomId] = rooms[data.roomId]?.filter(id => id !== socket.id) ?? [];
+    rooms[data.roomId]?.removeUser(socket.id);
     socket.leave(data.roomId);
     logger.info(`User ${socket.id} left room ${data.roomId}`);
-    if (rooms[data.roomId]?.length === 0) {
+    if (rooms[data.roomId]?.isEmpty()) {
       delete rooms[data.roomId];
     } else {
       io.to(data.roomId).emit('userLeft', socket.id);
@@ -98,9 +105,11 @@ export function startGame(
   socket: Socket,
   rooms: IRooms
 ) {
-  const userRoom = Object.keys(rooms).find(room => rooms[room]?.includes(socket.id));
-  if (userRoom) {
-    io.to(userRoom).emit('gameStarted', userRoom);
+  const roomId = Object.keys(rooms).find(room => rooms[room]?.isUserInRoom(socket.id));
+  if (roomId) {
+    logger.info(`Starting game in room: ${roomId} by user ${socket.id}`);
+    io.to(roomId).emit('gameStarted', roomId);
+    rooms[roomId].startGame();
   } else {
     socket.emit('error', 'You are not in a room');
   }
@@ -117,8 +126,8 @@ export function handleDisconnect(
   rooms: IRooms
 ) {
   for (const room in rooms) {
-    rooms[room] = rooms[room]?.filter(id => id !== socket.id) ?? [];
-    if (rooms[room].length === 0) {
+    rooms[room]?.removeUser(socket.id);
+    if (rooms[room].isEmpty()) {
       delete rooms[room];
       logger.info(`Room ${room} deleted as it is empty`);
     } else {
