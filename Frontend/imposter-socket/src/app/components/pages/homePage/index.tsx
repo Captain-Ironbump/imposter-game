@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import socket from "@/app/constant/server";
+import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
   const [rooms, setRooms] = useState<string[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     socket.emit("getRooms");
@@ -13,10 +15,16 @@ const HomePage = () => {
       setRooms(roomList);
     });
 
+    socket.on("gameStarted", (roomId) => {
+      console.log(`Game started in room: ${roomId}`);
+      router.push(`/game?roomId=${roomId}`);
+    });
+
     return () => {
       socket.off("roomsList");
+      socket.off("gameStarted");
     };
-  }, []);
+  }, [router]);
 
   const handleCreateRoom = () => {
     socket.emit("createRoom");
@@ -28,6 +36,13 @@ const HomePage = () => {
       console.log(`Joining room: ${selectedRoom}`);
     }
   };
+
+  const handleStartGame = () => {
+    if (selectedRoom) {
+      socket.emit("startGame");
+      console.log(`Starting game in room: ${selectedRoom}`);
+    }
+  }
 
   return (
     <main className="min-h-screen flex">
@@ -69,6 +84,12 @@ const HomePage = () => {
           disabled={!selectedRoom}
         >
           Join Room
+        </button>
+        <button
+          className={`w-1/2 py-3 font-semibold rounded bg-red-600 hover:bg-red-700 text-white"}`}
+          onClick={handleStartGame}
+        >
+          Start Game
         </button>
       </section>
     </main>
