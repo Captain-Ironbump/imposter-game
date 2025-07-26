@@ -1,6 +1,6 @@
 const express = require("express");
 const http = require("http");
-import{ Express } from "express";
+import { Express } from "express";
 import { Server as HTTPServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { logger } from "./util/logger.js";
