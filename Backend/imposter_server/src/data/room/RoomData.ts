@@ -5,11 +5,13 @@ export class RoomData implements IRoomData {
     public roomId: string;
     userIds: string[];
     gameStarted: boolean;
+    roomLeaderId: string;
     private observers: IRoomObserver[] = [];
     
-    constructor(roomId: string) {
+    constructor(roomId: string, roomLeaderId: string) {
         this.roomId = roomId;
         this.gameStarted = false;
+        this.roomLeaderId = roomLeaderId;
         this.userIds = [];
     }
     
@@ -29,6 +31,7 @@ export class RoomData implements IRoomData {
 
     startGame(): void {
         this.gameStarted = true;
+        this.notifyGameStarted();
     }
 
     reset(): void {
@@ -65,7 +68,7 @@ export class RoomData implements IRoomData {
 
     private notifyGameStarted(): void {
         for (const observer of this.observers) {
-            observer.onGameStarted(this.roomId);
+            observer.onGameStarted(this.roomId, this.roomLeaderId);
         }
     }
 }

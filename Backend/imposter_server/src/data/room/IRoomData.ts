@@ -3,6 +3,7 @@ import { IRoomObserver } from "./IRoomObserver";
 export interface IRoomData {
     userIds: string[]; 
     gameStarted: boolean;
+    roomLeaderId: string;
     addUser(userId: string): void;
     removeUser(userId: string): void;
     isEmpty(): boolean;

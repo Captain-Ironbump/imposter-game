@@ -1,3 +1,3 @@
 export interface IRoomObserver {
-    onGameStarted(roomId: string): void;
+    onGameStarted(roomId: string, leader: string): void;
 }
