@@ -1,22 +1,12 @@
-'use client';
+import React, { Suspense } from 'react';
+import GamePage from './GamePage'; 
 
-import { useSearchParams } from 'next/navigation';
-
-const GamePage = () => {
-  const searchParams = useSearchParams();
-  const roomId = searchParams.get('roomId');
-
-  if (!roomId) {
-    return <p>No room ID provided. Please join a room.</p>;
-  }
-
+const Page = () => {
   return (
-    <div>
-      <h1>Game Room: {roomId}</h1>
-      {/* Your game logic and UI */}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <GamePage />
+    </Suspense>
   );
-};
+}
 
-export default GamePage;
-
+export default Page;

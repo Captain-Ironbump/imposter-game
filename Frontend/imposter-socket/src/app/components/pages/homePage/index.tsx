@@ -15,9 +15,9 @@ const HomePage = () => {
       setRooms(roomList);
     });
 
-    socket.on("gameStarted", (roomId) => {
+    socket.on("gameStarted", ({ roomId, leader }) => {
       console.log(`Game started in room: ${roomId}`);
-      router.push(`/game?roomId=${roomId}`);
+      router.push(`/game?roomId=${roomId}&leader=${leader}`);
     });
 
     return () => {

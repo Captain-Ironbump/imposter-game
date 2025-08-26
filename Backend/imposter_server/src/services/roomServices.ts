@@ -26,7 +26,7 @@ export function createRoom(
 ) {
   const roomId = `Room-${Math.floor(Math.random() * 1000)}`;
   if (!rooms[roomId]) {
-    let roomData: IRoomData = new RoomData(roomId);
+    let roomData: IRoomData = new RoomData(roomId, socket.id);
     roomData.addUser(socket.id); 
     roomData.addObserver(observer);
     rooms[roomId] = roomData;
@@ -135,4 +135,39 @@ export function handleDisconnect(
     }
   }
   logger.info(`User disconnected: ${socket.id}`);
+}
+
+export function handleGetRoomCreator(
+  io: Server<
+    ClientToServerEvents,
+    ServerToClientEvents,
+    InterServerEvents,
+    SocketData
+  >,
+  socket: Socket,
+  rooms: IRooms,
+  data: { roomId: string }
+) {
+  const room = rooms[data.roomId];
+  if (room) {
+    socket.emit('roomCreator', room.roomLeaderId);
+  } else {
+    socket.emit('error', 'Room does not exist');
+  }
+}
+
+export function handleStartRound(
+  data: { 
+    roomId: string, 
+    leader: string, 
+    inputValue: string 
+  },
+  rooms: IRooms
+) {
+  logger.debug(data);
+  const room = rooms[data.roomId];
+  if (room && room.roomLeaderId === data.leader) {
+    rooms[data.roomId].word = data.inputValue;
+    room.startRound();
+  }
 }

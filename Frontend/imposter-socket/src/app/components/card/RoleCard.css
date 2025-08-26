@@ -1,0 +1,27 @@
+.role-card {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 350px; /* or whatever size fits best */
+}
+
+.role-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.crewmate-text {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0%, -150%);
+  font-family: monospace;
+  font-size: 3em;
+  color: aqua;
+  background-color: #000;
+  text-shadow: 2px 2px #000;
+  pointer-events: none;
+  width: 100%;
+  text-align: center;
+}
