@@ -1,3 +1,4 @@
+import { logger } from "../../util/logger";
 import { IRoomData } from "./IRoomData";
 import { IRoomObserver } from "./IRoomObserver";
 
@@ -6,6 +7,7 @@ export class RoomData implements IRoomData {
     userIds: string[];
     gameStarted: boolean;
     roomLeaderId: string;
+    word: string;
     private observers: IRoomObserver[] = [];
     
     constructor(roomId: string, roomLeaderId: string) {
@@ -13,6 +15,7 @@ export class RoomData implements IRoomData {
         this.gameStarted = false;
         this.roomLeaderId = roomLeaderId;
         this.userIds = [];
+        this.word = "";
     }
     
     addUser(userId: string): void {
@@ -31,7 +34,23 @@ export class RoomData implements IRoomData {
 
     startGame(): void {
         this.gameStarted = true;
+        // initialize word for the current game state 
         this.notifyGameStarted();
+    }
+
+    startRound(): void {
+        if (!this.gameStarted) {
+            logger.error("round cannot be startet, game needs to start first!");
+            // TODO: notify of error --> should actually never happen
+            return;
+        }
+        if (this.word == null) {
+            logger.error("round cannot be startet, no word specified!");
+            // TODO: notify of error 
+            return;
+        }
+        
+        this.notifyRoundStarted();
     }
 
     reset(): void {
@@ -69,6 +88,12 @@ export class RoomData implements IRoomData {
     private notifyGameStarted(): void {
         for (const observer of this.observers) {
             observer.onGameStarted(this.roomId, this.roomLeaderId);
+        }
+    }
+
+    private notifyRoundStarted(): void {
+        for (const observer of this.observers) {
+            observer.onRoundStarted(this.roomId, this.word);
         }
     }
 }

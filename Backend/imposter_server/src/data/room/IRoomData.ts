@@ -4,6 +4,7 @@ export interface IRoomData {
     userIds: string[]; 
     gameStarted: boolean;
     roomLeaderId: string;
+    word: string;
     addUser(userId: string): void;
     removeUser(userId: string): void;
     isEmpty(): boolean;
@@ -13,6 +14,7 @@ export interface IRoomData {
     isGameStarted(): boolean;
     toJSON(): object;
     isUserInRoom(userId: string): boolean;
+    startRound(): void;
 
 
     addObserver(observer: IRoomObserver): void;

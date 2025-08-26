@@ -156,3 +156,18 @@ export function handleGetRoomCreator(
   }
 }
 
+export function handleStartRound(
+  data: { 
+    roomId: string, 
+    leader: string, 
+    inputValue: string 
+  },
+  rooms: IRooms
+) {
+  logger.debug(data);
+  const room = rooms[data.roomId];
+  if (room && room.roomLeaderId === data.leader) {
+    rooms[data.roomId].word = data.inputValue;
+    room.startRound();
+  }
+}

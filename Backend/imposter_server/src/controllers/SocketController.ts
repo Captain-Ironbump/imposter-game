@@ -6,7 +6,8 @@ import {
   leaveRoom,
   startGame,
   handleDisconnect,
-  handleGetRoomCreator
+  handleGetRoomCreator,
+  handleStartRound
 } from '../services/roomServices.js';
 import type { Server, Socket } from 'socket.io';
 import type {
@@ -32,5 +33,6 @@ export class SocketController {
     socket.on('startGame', () => startGame(this.io, socket, rooms));
     socket.on('disconnect', () => handleDisconnect(this.io, socket, rooms));
     socket.on('getRoomCreator', (data: { roomId: string }) => handleGetRoomCreator(this.io, socket, rooms, data));
+    socket.on('startRound', (data: { roomId: string, leader: string, inputValue: string }) => handleStartRound(data, rooms));
   }
 }
