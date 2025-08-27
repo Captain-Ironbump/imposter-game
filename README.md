@@ -49,3 +49,9 @@ services:
 networks:
   app-network:
     driver: bridge
+```
+
+Um die services von docker Hub zu pullen und zu starten, muss im selben Directory die **`docker-compose.yml`** mit folgendem Kommand ausgeführt:
+```yaml
+docker compose -p imposter-game up -d
+```
