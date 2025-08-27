@@ -27,14 +27,14 @@ services:
       - NEXT_PUBLIC_SOCKET_URL=/
       - SERVER_WEB_SOCKET_PATH=/socket.io
     networks:
-      - app-network
+      - imposter-game-network
 
   backend:
     image: captainironbump/imposter-game:backend
     expose:
       - 4000
     networks:
-      - app-network
+      - imposter-game-network
 
   reverse-proxy:
     image: captainironbump/imposter-game:reverse-proxy
@@ -44,10 +44,10 @@ services:
       - frontend
       - backend
     networks:
-      - app-network
+      - imposter-game-network
 
 networks:
-  app-network:
+  imposter-game-network:
     driver: bridge
 ```
 
