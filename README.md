@@ -9,7 +9,7 @@ Jeder Dienst basiert auf demselben Docker-Image (`myname/myimage`), aber mit unt
 
 - [Docker](https://docs.docker.com/get-docker/) installiert  
 - [Docker Compose](https://docs.docker.com/compose/install/) installiert
-- [Ports] der Port ´3105´ muss freigegeben werden
+- Port ´3105´ muss freigegeben werden
 
 ---
 
